@@ -954,17 +954,107 @@ ORDER BY
             </header>
         </table>
         <grid id="1298">
-            <column id="1299"/>
-            <column id="1300"/>
-            <column id="1301"/>
+            <property name="fontFamily">"Calibri"</property>
+            <property name="height">0.78125in</property>
+            <property name="width">3.4895833333333335in</property>
+            <column id="1299">
+                <property name="width">1.1354166666666667in</property>
+            </column>
+            <column id="1300">
+                <property name="width">1.1770833333333333in</property>
+            </column>
+            <column id="1301">
+                <property name="width">1.1770833333333333in</property>
+            </column>
+            <row id="1318">
+                <property name="backgroundColor">#C9C9C9</property>
+                <property name="height">0.188in</property>
+                <cell id="1319">
+                    <property name="colSpan">3</property>
+                    <property name="rowSpan">1</property>
+                    <property name="borderBottomStyle">solid</property>
+                    <property name="borderBottomWidth">thin</property>
+                    <property name="borderLeftStyle">solid</property>
+                    <property name="borderLeftWidth">thin</property>
+                    <property name="borderRightStyle">solid</property>
+                    <property name="borderRightWidth">thin</property>
+                    <property name="borderTopStyle">solid</property>
+                    <property name="borderTopWidth">thin</property>
+                    <property name="verticalAlign">middle</property>
+                    <label id="1322">
+                        <property name="color">#000000</property>
+                        <property name="textAlign">center</property>
+                        <text-property name="text">Sintesi Totali Margini Ordini Giornalieri</text-property>
+                    </label>
+                </cell>
+            </row>
+            <row id="1310">
+                <property name="height">0.188in</property>
+                <cell id="1311">
+                    <property name="borderBottomStyle">solid</property>
+                    <property name="borderBottomWidth">thin</property>
+                    <property name="borderLeftStyle">solid</property>
+                    <property name="borderLeftWidth">thin</property>
+                    <property name="borderRightStyle">solid</property>
+                    <property name="borderRightWidth">thin</property>
+                    <property name="borderTopStyle">solid</property>
+                    <property name="borderTopWidth">thin</property>
+                    <property name="verticalAlign">middle</property>
+                    <label id="1314">
+                        <property name="textAlign">center</property>
+                        <text-property name="text">Ricavo Totale </text-property>
+                    </label>
+                </cell>
+                <cell id="1312">
+                    <property name="borderBottomStyle">solid</property>
+                    <property name="borderBottomWidth">thin</property>
+                    <property name="borderLeftStyle">solid</property>
+                    <property name="borderLeftWidth">thin</property>
+                    <property name="borderRightStyle">solid</property>
+                    <property name="borderRightWidth">thin</property>
+                    <property name="borderTopStyle">solid</property>
+                    <property name="borderTopWidth">thin</property>
+                    <property name="verticalAlign">middle</property>
+                    <label id="1315">
+                        <property name="textAlign">center</property>
+                        <text-property name="text">Margine totale</text-property>
+                    </label>
+                </cell>
+                <cell id="1313">
+                    <property name="borderBottomStyle">solid</property>
+                    <property name="borderBottomWidth">thin</property>
+                    <property name="borderLeftStyle">solid</property>
+                    <property name="borderLeftWidth">thin</property>
+                    <property name="borderRightStyle">solid</property>
+                    <property name="borderRightWidth">thin</property>
+                    <property name="borderTopStyle">solid</property>
+                    <property name="borderTopWidth">thin</property>
+                    <property name="verticalAlign">middle</property>
+                    <label id="1316">
+                        <property name="textAlign">center</property>
+                        <text-property name="text">Margine %</text-property>
+                    </label>
+                </cell>
+            </row>
             <row id="1302">
+                <property name="height">0.188in</property>
                 <cell id="1303">
+                    <property name="borderBottomStyle">solid</property>
+                    <property name="borderBottomWidth">thin</property>
+                    <property name="borderLeftStyle">solid</property>
+                    <property name="borderLeftWidth">thin</property>
+                    <property name="borderRightStyle">solid</property>
+                    <property name="borderRightWidth">thin</property>
+                    <property name="borderTopStyle">solid</property>
+                    <property name="borderTopWidth">thin</property>
+                    <property name="verticalAlign">middle</property>
                     <data id="1308">
                         <structure name="numberFormat">
                             <property name="category">Currency</property>
                             <property name="pattern">€#,##0.00{RoundingMode=HALF_UP}</property>
                             <property name="locale">it</property>
                         </structure>
+                        <property name="textAlign">right</property>
                         <property name="dataSet">Ordini_Giornalieri</property>
                         <list-property name="boundDataColumns">
                             <structure>
@@ -984,12 +1074,22 @@ ORDER BY
                     </data>
                 </cell>
                 <cell id="1304">
+                    <property name="borderBottomStyle">solid</property>
+                    <property name="borderBottomWidth">thin</property>
+                    <property name="borderLeftStyle">solid</property>
+                    <property name="borderLeftWidth">thin</property>
+                    <property name="borderRightStyle">solid</property>
+                    <property name="borderRightWidth">thin</property>
+                    <property name="borderTopStyle">solid</property>
+                    <property name="borderTopWidth">thin</property>
+                    <property name="verticalAlign">middle</property>
                     <data id="1309">
                         <structure name="numberFormat">
                             <property name="category">Currency</property>
                             <property name="pattern">€#,##0.00{RoundingMode=HALF_UP}</property>
                             <property name="locale">it</property>
                         </structure>
+                        <property name="textAlign">right</property>
                         <property name="dataSet">Ordini_Giornalieri</property>
                         <list-property name="boundDataColumns">
                             <structure>
@@ -1008,11 +1108,51 @@ ORDER BY
                         <property name="resultSetColumn">Column Binding</property>
                     </data>
                 </cell>
-                <cell id="1305"/>
+                <cell id="1305">
+                    <property name="borderBottomStyle">solid</property>
+                    <property name="borderBottomWidth">thin</property>
+                    <property name="borderLeftStyle">solid</property>
+                    <property name="borderLeftWidth">thin</property>
+                    <property name="borderRightStyle">solid</property>
+                    <property name="borderRightWidth">thin</property>
+                    <property name="borderTopStyle">solid</property>
+                    <property name="borderTopWidth">thin</property>
+                    <property name="verticalAlign">middle</property>
+                    <data id="1317">
+                        <structure name="numberFormat">
+                            <property name="category">Percent</property>
+                            <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                        </structure>
+                        <property name="textAlign">center</property>
+                        <property name="dataSet">Ordini_Giornalieri</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">PrezzoTotRiga</property>
+                                <text-property name="displayName">PrezzoTotRiga</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["PrezzoTotRiga"]</expression>
+                                <property name="dataType">float</property>
+                            </structure>
+                            <structure>
+                                <property name="name">margine</property>
+                                <text-property name="displayName">margine</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["margine"]</expression>
+                                <property name="dataType">float</property>
+                            </structure>
+                            <structure>
+                                <property name="name">Column Binding</property>
+                                <expression name="expression" type="javascript">row["margine"]/row["PrezzoTotRiga"]</expression>
+                                <property name="dataType">decimal</property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                        </list-property>
+                        <property name="resultSetColumn">Column Binding</property>
+                    </data>
+                </cell>
             </row>
         </grid>
         <table id="823">
             <property name="fontFamily">"Calibri"</property>
+            <property name="marginTop">15pt</property>
             <property name="width">11.177083333333334in</property>
             <property name="dataSet">Ordini_Giornalieri</property>
             <list-property name="boundDataColumns">
@@ -1147,22 +1287,22 @@ ORDER BY
                 <property name="width">1.5in</property>
             </column>
             <column id="889">
-                <property name="width">3.1875in</property>
+                <property name="width">3.0520833333333335in</property>
             </column>
             <column id="890">
-                <property name="width">0.9791666666666666in</property>
+                <property name="width">1.0416666666666667in</property>
             </column>
             <column id="892">
-                <property name="width">0.59375in</property>
+                <property name="width">0.6354166666666666in</property>
             </column>
             <column id="893">
-                <property name="width">0.5104166666666666in</property>
+                <property name="width">0.4895833333333333in</property>
             </column>
             <column id="894">
-                <property name="width">0.3541666666666667in</property>
+                <property name="width">0.3125in</property>
             </column>
             <column id="895">
-                <property name="width">0.9791666666666666in</property>
+                <property name="width">1.0729166666666667in</property>
             </column>
             <column id="896">
                 <property name="width">0.9375in</property>
@@ -1399,7 +1539,7 @@ ORDER BY
                             <label id="1170">
                                 <property name="color">#FFFFFF</property>
                                 <property name="textAlign">center</property>
-                                <text-property name="text">Prezzo Tot. Riga</text-property>
+                                <text-property name="text">Ricavo Tot. Riga</text-property>
                             </label>
                         </cell>
                         <cell id="1163">
@@ -1433,7 +1573,7 @@ ORDER BY
                             <label id="1172">
                                 <property name="color">#FFFFFF</property>
                                 <property name="textAlign">center</property>
-                                <text-property name="text">% Marg Riga</text-property>
+                                <text-property name="text">Marg Riga %</text-property>
                             </label>
                         </cell>
                     </row>
@@ -1546,7 +1686,7 @@ ORDER BY
                             <data id="1242">
                                 <structure name="numberFormat">
                                     <property name="category">Percent</property>
-                                    <property name="pattern">%###0.00{RoundingMode=HALF_UP}</property>
+                                    <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
                                 </structure>
                                 <property name="textAlign">center</property>
                                 <property name="resultSetColumn">Column Binding</property>
@@ -1741,7 +1881,7 @@ ORDER BY
                         <data id="873">
                             <structure name="numberFormat">
                                 <property name="category">Custom</property>
-                                <property name="pattern">'%' 0.00</property>
+                                <property name="pattern">0.00 '%'</property>
                             </structure>
                             <property name="textAlign">center</property>
                             <property name="resultSetColumn">MargineTotaleRigaPercentuale</property>

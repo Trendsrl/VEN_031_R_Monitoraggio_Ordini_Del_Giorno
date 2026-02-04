@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.27" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 4.19.0.v202502081713</property>
+    <property name="createdBy">Eclipse BIRT Designer Version 4.22.0.v202509121501</property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="bidiLayoutOrientation">ltr</property>
@@ -24,7 +24,7 @@
                 </ex-property>
             </list-property>
             <property name="odaDriverClass">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-            <property name="odaURL">jdbc:sqlserver://SQLDataPath;databaseName=ADB_TREND</property>
+            <property name="odaURL">jdbc:sqlserver://SQLDataPath;databaseName=ADB_TREND;encrypt=true;trustServerCertificate=true;</property>
             <property name="odaUser">BI</property>
             <encrypted-property name="odaPassword" encryptionID="base64">RWxldHRybzA5dDEyTg==</encrypted-property>
         </oda-data-source>

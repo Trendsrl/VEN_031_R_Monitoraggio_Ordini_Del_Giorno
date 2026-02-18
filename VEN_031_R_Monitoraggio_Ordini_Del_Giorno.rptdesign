@@ -866,7 +866,7 @@ ORDER BY
                                         <property name="fontSize">xx-small</property>
                                         <property name="fontWeight">normal</property>
                                         <property name="textAlign">left</property>
-                                        <text-property name="text">Giornaliera 12: 00 e 17: 00 </text-property>
+                                        <text-property name="text">Giornaliera 13: 00 e 18: 00 </text-property>
                                     </label>
                                 </cell>
                             </row>

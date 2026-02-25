@@ -134,6 +134,30 @@
                     <text-property name="displayName">MargineTotaleRigaPercentuale</text-property>
                     <text-property name="heading">MargineTotaleRigaPercentuale</text-property>
                 </structure>
+                <structure>
+                    <property name="columnName">PercTrasportoRegalato</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">PercTrasportoRegalato</text-property>
+                    <text-property name="heading">PercTrasportoRegalato</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">MargineNettoRealeOrdine</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">MargineNettoRealeOrdine</text-property>
+                    <text-property name="heading">MargineNettoRealeOrdine</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">PercTrasportoRegalataAgente</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">PercTrasportoRegalataAgente</text-property>
+                    <text-property name="heading">PercTrasportoRegalataAgente</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">MargineNettoRealeAgente</property>
+                    <property name="analysis">measure</property>
+                    <text-property name="displayName">MargineNettoRealeAgente</text-property>
+                    <text-property name="heading">MargineNettoRealeAgente</text-property>
+                </structure>
             </list-property>
             <list-property name="parameters"/>
             <structure name="cachedMetaData">
@@ -205,11 +229,31 @@
                     </structure>
                     <structure>
                         <property name="position">14</property>
-                        <property name="name">PrezzoTotRiga</property>
+                        <property name="name">PercTrasportoRegalato</property>
                         <property name="dataType">float</property>
                     </structure>
                     <structure>
                         <property name="position">15</property>
+                        <property name="name">MargineNettoRealeOrdine</property>
+                        <property name="dataType">float</property>
+                    </structure>
+                    <structure>
+                        <property name="position">16</property>
+                        <property name="name">PercTrasportoRegalataAgente</property>
+                        <property name="dataType">float</property>
+                    </structure>
+                    <structure>
+                        <property name="position">17</property>
+                        <property name="name">MargineNettoRealeAgente</property>
+                        <property name="dataType">float</property>
+                    </structure>
+                    <structure>
+                        <property name="position">18</property>
+                        <property name="name">PrezzoTotRiga</property>
+                        <property name="dataType">float</property>
+                    </structure>
+                    <structure>
+                        <property name="position">19</property>
                         <property name="name">margine</property>
                         <property name="dataType">float</property>
                     </structure>
@@ -308,48 +352,152 @@
                     <property name="dataType">float</property>
                     <property name="nativeDataType">8</property>
                 </structure>
+                <structure>
+                    <property name="position">14</property>
+                    <property name="name">PercTrasportoRegalato</property>
+                    <property name="nativeName">PercTrasportoRegalato</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
+                </structure>
+                <structure>
+                    <property name="position">15</property>
+                    <property name="name">MargineNettoRealeOrdine</property>
+                    <property name="nativeName">MargineNettoRealeOrdine</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
+                </structure>
+                <structure>
+                    <property name="position">16</property>
+                    <property name="name">PercTrasportoRegalataAgente</property>
+                    <property name="nativeName">PercTrasportoRegalataAgente</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
+                </structure>
+                <structure>
+                    <property name="position">17</property>
+                    <property name="name">MargineNettoRealeAgente</property>
+                    <property name="nativeName">MargineNettoRealeAgente</property>
+                    <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
+                </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[USE DATA_FACTORY;
 
+WITH TrasportoPerOrdine AS (
+    SELECT
+        ORD.NumeroDoc,
+
+        SUM(CASE WHEN RTRIM(ORD.Cd_AR) NOT IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                 THEN ORD.PrezzoTotaleMovE ELSE 0 END) AS RicavoSoloMerce,
+
+        SUM(CASE WHEN RTRIM(ORD.Cd_AR) IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                 THEN ABS(ORD.PrezzoTotaleMovE) ELSE 0 END) AS ValoreTrasportoRegalato,
+
+        -- Margine netto reale ordine (0.xx per BIRT)
+        CAST(
+            (
+                SUM(CASE WHEN RTRIM(ORD.Cd_AR) NOT IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                         THEN (ORD.PrezzoTotaleMovE - (ORD.ValoreE * ORD.Qta)) ELSE 0 END)
+                - SUM(CASE WHEN RTRIM(ORD.Cd_AR) IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                         THEN ABS(ORD.PrezzoTotaleMovE) ELSE 0 END)
+            )
+            / NULLIF(SUM(CASE WHEN RTRIM(ORD.Cd_AR) NOT IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                     THEN ORD.PrezzoTotaleMovE ELSE 0 END), 0)
+        AS DECIMAL(10,4)) AS MargineNettoRealeOrdine,
+
+        -- % trasporto regalato NEGATIVA (0.xx per BIRT)
+        CAST(
+            -SUM(CASE WHEN RTRIM(ORD.Cd_AR) IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                     THEN ABS(ORD.PrezzoTotaleMovE) ELSE 0 END)
+            / NULLIF(SUM(CASE WHEN RTRIM(ORD.Cd_AR) NOT IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                     THEN ORD.PrezzoTotaleMovE ELSE 0 END), 0)
+        AS DECIMAL(10,4)) AS PercTrasportoRegalato
+
+    FROM VW_BASE_ORDINATO_CLIENTI AS ORD
+    WHERE
+        ORD.DataDoc >= CAST(GETDATE() AS DATE)
+        AND ORD.DataDoc < DATEADD(day, 1, CAST(GETDATE() AS DATE))
+    GROUP BY ORD.NumeroDoc
+),
+
+MarginePerAgente AS (
+    SELECT
+        ORD.Cd_Agente_1,
+
+        -- % trasporto regalato agente NEGATIVA (0.xx per BIRT)
+        CAST(
+            -SUM(CASE WHEN RTRIM(ORD.Cd_AR) IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                     THEN ABS(ORD.PrezzoTotaleMovE) ELSE 0 END)
+            / NULLIF(SUM(CASE WHEN RTRIM(ORD.Cd_AR) NOT IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                     THEN ORD.PrezzoTotaleMovE ELSE 0 END), 0)
+        AS DECIMAL(10,4)) AS PercTrasportoRegalataAgente,
+
+        -- Margine netto reale agente (0.xx per BIRT)
+        CAST(
+            (
+                SUM(CASE WHEN RTRIM(ORD.Cd_AR) NOT IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                         THEN (ORD.PrezzoTotaleMovE - (ORD.ValoreE * ORD.Qta)) ELSE 0 END)
+                - SUM(CASE WHEN RTRIM(ORD.Cd_AR) IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                         THEN ABS(ORD.PrezzoTotaleMovE) ELSE 0 END)
+            )
+            / NULLIF(SUM(CASE WHEN RTRIM(ORD.Cd_AR) NOT IN ('SCOTRASP','SCOTRASPT','SCOTRASPMI','TRASPORTO')
+                     THEN ORD.PrezzoTotaleMovE ELSE 0 END), 0)
+        AS DECIMAL(10,4)) AS MargineNettoRealeAgente
+
+    FROM VW_BASE_ORDINATO_CLIENTI AS ORD
+    WHERE
+        ORD.DataDoc >= CAST(GETDATE() AS DATE)
+        AND ORD.DataDoc < DATEADD(day, 1, CAST(GETDATE() AS DATE))
+    GROUP BY ORD.Cd_Agente_1
+)
+
 SELECT
-    AG.Descrizione AS NomeAgente,
-    CF.Descrizione AS NomeCliente,
+    AG.Descrizione                          AS NomeAgente,
+    CF.Descrizione                          AS NomeCliente,
     ISNULL(class.Fascia, 'NON DISPONIBILE') AS Fascia,
     ORD.NumeroDoc,
-    CAST(ORD.DataDoc AS DATE) AS DataDocumento,
-    ORD.Cd_AR AS CodiceArticolo,
-    ORD.descArticolo AS DescrizioneArticolo, 
-    ORD.prezzounitarioE AS PrezzoUnitarioNetto, 
-    ORD.ScontoRiga AS Sconto,
+    CAST(ORD.DataDoc AS DATE)               AS DataDocumento,
+    ORD.Cd_AR                               AS CodiceArticolo,
+    ORD.descArticolo                        AS DescrizioneArticolo,
+    ORD.prezzounitarioE                     AS PrezzoUnitarioNetto,
+    ORD.ScontoRiga                          AS Sconto,
     ORD.Qta,
-    
-    -- Il Ricavo Totale della Riga (il prezzo finale pagato dal cliente)
-    ORD.PrezzoTotaleMovE AS PrezzoTotaleRiga,
+    ORD.PrezzoTotaleMovE                    AS PrezzoTotaleRiga,
 
-    -- --- CALCOLO DEL MARGINE IN VALORE (Ricavo - Costo) ---
+    -- Margine valore sulla riga
     (ORD.PrezzoTotaleMovE - (ORD.ValoreE * ORD.Qta)) AS MargineTotaleRigaValore,
 
-    -- --- CALCOLO DEL MARGINE IN PERCENTUALE ---
+    -- Margine % sulla riga (0.xx per BIRT)
     CAST(
-        ( (ORD.PrezzoTotaleMovE - (ORD.ValoreE * ORD.Qta)) / NULLIF(ORD.PrezzoTotaleMovE, 0) ) * 100
-        AS DECIMAL(10, 2)
-    ) AS MargineTotaleRigaPercentuale
+        (ORD.PrezzoTotaleMovE - (ORD.ValoreE * ORD.Qta))
+        / NULLIF(ORD.PrezzoTotaleMovE, 0)
+    AS DECIMAL(10,4)) AS MargineTotaleRigaPercentuale,
 
-FROM
-    VW_BASE_ORDINATO_CLIENTI AS ORD
-INNER JOIN 
-    ADB_TREND.DBO.AGENTE AS AG ON ORD.Cd_Agente_1 = AG.Cd_Agente
-INNER JOIN
-    ADB_TREND.DBO.CF AS CF ON ORD.Cd_CF = CF.Cd_CF 
-LEFT JOIN 
-	[DATA_FACTORY].[dbo].[TB_STAT_CLIENTI_CLASSIFICAZIONE_SOLO_MATERIALI_ULTIMI_12_M]  AS class ON clasS.Cd_CF = CF.Cd_CF
+    -- Totale ordine
+    T.PercTrasportoRegalato,
+    T.MargineNettoRealeOrdine,
+
+    -- Totale agente
+    MA.PercTrasportoRegalataAgente,
+MA.MargineNettoRealeAgente 
+FROM VW_BASE_ORDINATO_CLIENTI AS ORD
+INNER JOIN ADB_TREND.DBO.AGENTE AS AG
+    ON ORD.Cd_Agente_1 = AG.Cd_Agente
+INNER JOIN ADB_TREND.DBO.CF AS CF
+    ON ORD.Cd_CF = CF.Cd_CF
+LEFT JOIN [DATA_FACTORY].[dbo].[TB_STAT_CLIENTI_CLASSIFICAZIONE_SOLO_MATERIALI_ULTIMI_12_M] AS class
+    ON class.Cd_CF = CF.Cd_CF
+INNER JOIN TrasportoPerOrdine AS T
+    ON T.NumeroDoc = ORD.NumeroDoc
+INNER JOIN MarginePerAgente AS MA
+    ON MA.Cd_Agente_1 = ORD.Cd_Agente_1
 WHERE
     ORD.DataDoc >= CAST(GETDATE() AS DATE)
     AND ORD.DataDoc < DATEADD(day, 1, CAST(GETDATE() AS DATE))
 ORDER BY
-    NomeAgente,     
-    NomeCliente,    
-    ORD.NumeroDoc,  
+    NomeAgente,
+    NomeCliente,
+    ORD.NumeroDoc,
     ORD.Id_DORig;]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
@@ -618,8 +766,10 @@ ORDER BY
     </data-sets>
     <page-setup>
         <simple-master-page name="Simple MasterPage" id="2">
-            <property name="type">a4</property>
+            <property name="type">custom</property>
             <property name="orientation">landscape</property>
+            <property name="height">210mm</property>
+            <property name="width">305mm</property>
             <page-footer>
                 <grid id="465">
                     <property name="textAlign">right</property>
@@ -1193,7 +1343,7 @@ ORDER BY
         <table id="823">
             <property name="fontFamily">"Calibri"</property>
             <property name="marginTop">15pt</property>
-            <property name="width">11.177083333333334in</property>
+            <property name="width">11.427083333333334in</property>
             <property name="dataSet">Ordini_Giornalieri</property>
             <list-property name="boundDataColumns">
                 <structure>
@@ -1370,24 +1520,81 @@ ORDER BY
                     <property name="dataType">decimal</property>
                     <property name="allowExport">true</property>
                 </structure>
+                <structure>
+                    <property name="name">PercTrasportoRegalato</property>
+                    <text-property name="displayName">PercTrasportoRegalato</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["PercTrasportoRegalato"]</expression>
+                    <property name="dataType">float</property>
+                </structure>
+                <structure>
+                    <property name="name">MargineNettoRealeOrdine</property>
+                    <text-property name="displayName">MargineNettoRealeOrdine</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["MargineNettoRealeOrdine"]</expression>
+                    <property name="dataType">float</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_2</property>
+                    <expression name="expression" type="javascript">row["MargineNettoRealeOrdine"]</expression>
+                    <property name="dataType">decimal</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_3</property>
+                    <expression name="expression" type="javascript">row["PercTrasportoRegalato"]</expression>
+                    <property name="dataType">decimal</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_4</property>
+                    <expression name="expression" type="javascript">row["PercTrasportoRegalato"]</expression>
+                    <property name="dataType">decimal</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">MargineNettoRealeAgente</property>
+                    <text-property name="displayName">MargineNettoRealeAgente</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["MargineNettoRealeAgente"]</expression>
+                    <property name="dataType">float</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_5</property>
+                    <expression name="expression" type="javascript">row["MargineNettoRealeAgente"]</expression>
+                    <property name="dataType">decimal</property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">PercTrasportoRegalataAgente</property>
+                    <text-property name="displayName">PercTrasportoRegalataAgente</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["PercTrasportoRegalataAgente"]</expression>
+                    <property name="dataType">float</property>
+                </structure>
+                <structure>
+                    <property name="name">Column Binding_6</property>
+                    <expression name="expression" type="javascript">row["PercTrasportoRegalataAgente"]</expression>
+                    <property name="dataType">decimal</property>
+                    <property name="allowExport">true</property>
+                </structure>
             </list-property>
+            <column id="1433">
+                <property name="width">0.53125in</property>
+            </column>
             <column id="888">
-                <property name="width">1.5in</property>
+                <property name="width">1.6041666666666667in</property>
             </column>
             <column id="889">
-                <property name="width">3.0520833333333335in</property>
+                <property name="width">3.0729166666666665in</property>
             </column>
             <column id="890">
-                <property name="width">1.0416666666666667in</property>
+                <property name="width">0.9166666666666666in</property>
             </column>
             <column id="892">
-                <property name="width">0.6354166666666666in</property>
+                <property name="width">1.4375in</property>
             </column>
             <column id="893">
-                <property name="width">0.4895833333333333in</property>
+                <property name="width">0.3854166666666667in</property>
             </column>
             <column id="894">
-                <property name="width">0.3125in</property>
+                <property name="width">0.5833333333333334in</property>
             </column>
             <column id="895">
                 <property name="width">1.0729166666666667in</property>
@@ -1401,6 +1608,17 @@ ORDER BY
             <header>
                 <row id="1335">
                     <property name="height">0.26in</property>
+                    <cell id="1423">
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <property name="verticalAlign">middle</property>
+                    </cell>
                     <cell id="1336">
                         <property name="colSpan">9</property>
                         <property name="rowSpan">1</property>
@@ -1438,6 +1656,10 @@ ORDER BY
                 <header>
                     <row id="1395">
                         <property name="height">0.104in</property>
+                        <cell id="1424">
+                            <property name="backgroundColor">#FFFFFF</property>
+                            <property name="verticalAlign">middle</property>
+                        </cell>
                         <cell id="1396">
                             <property name="colSpan">9</property>
                             <property name="rowSpan">1</property>
@@ -1447,6 +1669,18 @@ ORDER BY
                     </row>
                     <row id="900">
                         <property name="height">0.26in</property>
+                        <cell id="1425">
+                            <property name="backgroundColor">#408080</property>
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">thin</property>
+                            <property name="borderLeftStyle">solid</property>
+                            <property name="borderLeftWidth">thin</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">thin</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">thin</property>
+                            <property name="verticalAlign">middle</property>
+                        </cell>
                         <cell id="901">
                             <property name="colSpan">9</property>
                             <property name="rowSpan">1</property>
@@ -1468,6 +1702,7 @@ ORDER BY
                     </row>
                     <row id="1203">
                         <property name="height">0.10416666666666667in</property>
+                        <cell id="1426"/>
                         <cell id="1204">
                             <property name="colSpan">8</property>
                             <property name="rowSpan">1</property>
@@ -1478,6 +1713,16 @@ ORDER BY
                 <footer>
                     <row id="1346">
                         <property name="height">0.188in</property>
+                        <cell id="1431">
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">thin</property>
+                            <property name="borderLeftStyle">solid</property>
+                            <property name="borderLeftWidth">thin</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">thin</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">thin</property>
+                        </cell>
                         <cell id="1348">
                             <property name="borderBottomStyle">solid</property>
                             <property name="borderBottomWidth">thin</property>
@@ -1499,16 +1744,6 @@ ORDER BY
                             <property name="borderTopWidth">thin</property>
                         </cell>
                         <cell id="1350">
-                            <property name="borderBottomStyle">solid</property>
-                            <property name="borderBottomWidth">thin</property>
-                            <property name="borderLeftStyle">solid</property>
-                            <property name="borderLeftWidth">thin</property>
-                            <property name="borderRightStyle">solid</property>
-                            <property name="borderRightWidth">thin</property>
-                            <property name="borderTopStyle">solid</property>
-                            <property name="borderTopWidth">thin</property>
-                        </cell>
-                        <cell id="1351">
                             <property name="colSpan">2</property>
                             <property name="rowSpan">1</property>
                             <property name="borderBottomStyle">solid</property>
@@ -1524,7 +1759,7 @@ ORDER BY
                                 <text-property name="text">Totale Agente </text-property>
                             </label>
                         </cell>
-                        <cell id="1353">
+                        <cell id="1442">
                             <property name="borderBottomStyle">solid</property>
                             <property name="borderBottomWidth">thin</property>
                             <property name="borderLeftStyle">solid</property>
@@ -1536,6 +1771,25 @@ ORDER BY
                             <data id="1380">
                                 <property name="textAlign">center</property>
                                 <property name="resultSetColumn">Aggregation_3</property>
+                            </data>
+                        </cell>
+                        <cell id="1353">
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">thin</property>
+                            <property name="borderLeftStyle">solid</property>
+                            <property name="borderLeftWidth">thin</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">thin</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">thin</property>
+                            <data id="1444">
+                                <structure name="numberFormat">
+                                    <property name="category">Percent</property>
+                                    <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                                    <property name="locale">it</property>
+                                </structure>
+                                <property name="textAlign">center</property>
+                                <property name="resultSetColumn">Column Binding_6</property>
                             </data>
                         </cell>
                         <cell id="1354">
@@ -1585,13 +1839,14 @@ ORDER BY
                             <property name="borderRightWidth">thin</property>
                             <property name="borderTopStyle">solid</property>
                             <property name="borderTopWidth">thin</property>
-                            <data id="1383">
+                            <data id="1443">
                                 <structure name="numberFormat">
                                     <property name="category">Percent</property>
-                                    <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                                    <property name="pattern">###0.00%{RoundingMode=UNNECESSARY}</property>
+                                    <property name="locale">it</property>
                                 </structure>
                                 <property name="textAlign">center</property>
-                                <property name="resultSetColumn">Column Binding_1</property>
+                                <property name="resultSetColumn">Column Binding_5</property>
                             </data>
                         </cell>
                     </row>
@@ -1614,6 +1869,18 @@ ORDER BY
                 <header>
                     <row id="1071">
                         <property name="height">0.26in</property>
+                        <cell id="1427">
+                            <property name="backgroundColor">#A2A2A2</property>
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">thin</property>
+                            <property name="borderLeftStyle">solid</property>
+                            <property name="borderLeftWidth">thin</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">thin</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">thin</property>
+                            <property name="verticalAlign">middle</property>
+                        </cell>
                         <cell id="1072">
                             <property name="colSpan">9</property>
                             <property name="rowSpan">1</property>
@@ -1670,6 +1937,23 @@ ORDER BY
                     </row>
                     <row id="1154">
                         <property name="height">0.26in</property>
+                        <cell id="1428">
+                            <property name="backgroundColor">#D1D1D1</property>
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">thin</property>
+                            <property name="borderLeftStyle">solid</property>
+                            <property name="borderLeftWidth">thin</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">thin</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">thin</property>
+                            <property name="verticalAlign">middle</property>
+                            <label id="1168">
+                                <property name="color">#000000</property>
+                                <property name="textAlign">center</property>
+                                <text-property name="text">N. Doc</text-property>
+                            </label>
+                        </cell>
                         <cell id="1156">
                             <property name="backgroundColor">#D1D1D1</property>
                             <property name="borderBottomStyle">solid</property>
@@ -1713,10 +1997,10 @@ ORDER BY
                             <property name="borderTopStyle">solid</property>
                             <property name="borderTopWidth">thin</property>
                             <property name="verticalAlign">middle</property>
-                            <label id="1166">
+                            <label id="1167">
                                 <property name="color">#000000</property>
                                 <property name="textAlign">center</property>
-                                <text-property name="text">Prezzo Unitario</text-property>
+                                <text-property name="text">Sconto</text-property>
                             </label>
                         </cell>
                         <cell id="1159">
@@ -1730,30 +2014,13 @@ ORDER BY
                             <property name="borderTopStyle">solid</property>
                             <property name="borderTopWidth">thin</property>
                             <property name="verticalAlign">middle</property>
-                            <label id="1167">
+                            <label id="1166">
                                 <property name="color">#000000</property>
                                 <property name="textAlign">center</property>
-                                <text-property name="text">Sconto</text-property>
+                                <text-property name="text">Prezzo Unitario listino</text-property>
                             </label>
                         </cell>
                         <cell id="1160">
-                            <property name="backgroundColor">#D1D1D1</property>
-                            <property name="borderBottomStyle">solid</property>
-                            <property name="borderBottomWidth">thin</property>
-                            <property name="borderLeftStyle">solid</property>
-                            <property name="borderLeftWidth">thin</property>
-                            <property name="borderRightStyle">solid</property>
-                            <property name="borderRightWidth">thin</property>
-                            <property name="borderTopStyle">solid</property>
-                            <property name="borderTopWidth">thin</property>
-                            <property name="verticalAlign">middle</property>
-                            <label id="1168">
-                                <property name="color">#000000</property>
-                                <property name="textAlign">center</property>
-                                <text-property name="text">N. Doc</text-property>
-                            </label>
-                        </cell>
-                        <cell id="1161">
                             <property name="backgroundColor">#D1D1D1</property>
                             <property name="borderBottomStyle">solid</property>
                             <property name="borderBottomWidth">thin</property>
@@ -1768,6 +2035,21 @@ ORDER BY
                                 <property name="color">#000000</property>
                                 <property name="textAlign">center</property>
                                 <text-property name="text">Qta</text-property>
+                            </label>
+                        </cell>
+                        <cell id="1161">
+                            <property name="backgroundColor">#D1D1D1</property>
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">thin</property>
+                            <property name="borderLeftStyle">solid</property>
+                            <property name="borderLeftWidth">thin</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">thin</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">thin</property>
+                            <property name="verticalAlign">middle</property>
+                            <label id="1441">
+                                <text-property name="text">% Trasp.</text-property>
                             </label>
                         </cell>
                         <cell id="1162">
@@ -1827,7 +2109,29 @@ ORDER BY
                     <row id="1183">
                         <property name="backgroundColor">#DFDFDF</property>
                         <property name="height">0.26in</property>
+                        <cell id="1430">
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">thin</property>
+                            <property name="borderLeftStyle">solid</property>
+                            <property name="borderLeftWidth">thin</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">thin</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">thin</property>
+                        </cell>
                         <cell id="1184">
+                            <property name="colSpan">1</property>
+                            <property name="rowSpan">1</property>
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">thin</property>
+                            <property name="borderLeftStyle">solid</property>
+                            <property name="borderLeftWidth">thin</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">thin</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">thin</property>
+                        </cell>
+                        <cell id="1437">
                             <property name="colSpan">3</property>
                             <property name="rowSpan">1</property>
                             <property name="borderBottomStyle">solid</property>
@@ -1838,34 +2142,12 @@ ORDER BY
                             <property name="borderRightWidth">thin</property>
                             <property name="borderTopStyle">solid</property>
                             <property name="borderTopWidth">thin</property>
+                            <label id="1235">
+                                <property name="textAlign">right</property>
+                                <text-property name="text">Totale Ordine</text-property>
+                            </label>
                         </cell>
-                        <cell id="1233">
-                            <property name="colSpan">2</property>
-                            <property name="rowSpan">1</property>
-                            <property name="borderBottomStyle">solid</property>
-                            <property name="borderBottomWidth">thin</property>
-                            <property name="borderLeftStyle">solid</property>
-                            <property name="borderLeftWidth">thin</property>
-                            <property name="borderRightStyle">solid</property>
-                            <property name="borderRightWidth">thin</property>
-                            <property name="borderTopStyle">solid</property>
-                            <property name="borderTopWidth">thin</property>
-                            <grid id="1236">
-                                <property name="width">1.0416666666666667in</property>
-                                <column id="1237">
-                                    <property name="width">0.90625in</property>
-                                </column>
-                                <row id="1239">
-                                    <cell id="1240">
-                                        <label id="1235">
-                                            <property name="textAlign">right</property>
-                                            <text-property name="text">Totale Ordine</text-property>
-                                        </label>
-                                    </cell>
-                                </row>
-                            </grid>
-                        </cell>
-                        <cell id="1190">
+                        <cell id="1439">
                             <property name="borderBottomStyle">solid</property>
                             <property name="borderBottomWidth">thin</property>
                             <property name="borderLeftStyle">solid</property>
@@ -1877,6 +2159,25 @@ ORDER BY
                             <data id="1227">
                                 <property name="textAlign">center</property>
                                 <property name="resultSetColumn">Aggregation</property>
+                            </data>
+                        </cell>
+                        <cell id="1190">
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">thin</property>
+                            <property name="borderLeftStyle">solid</property>
+                            <property name="borderLeftWidth">thin</property>
+                            <property name="borderRightStyle">solid</property>
+                            <property name="borderRightWidth">thin</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">thin</property>
+                            <property name="textAlign">center</property>
+                            <data id="1440">
+                                <structure name="numberFormat">
+                                    <property name="category">Percent</property>
+                                    <property name="pattern">###0.00%{RoundingMode=UNNECESSARY}</property>
+                                    <property name="locale">it</property>
+                                </structure>
+                                <property name="resultSetColumn">Column Binding_4</property>
                             </data>
                         </cell>
                         <cell id="1191">
@@ -1926,13 +2227,14 @@ ORDER BY
                             <property name="borderRightWidth">thin</property>
                             <property name="borderTopStyle">solid</property>
                             <property name="borderTopWidth">thin</property>
-                            <data id="1242">
+                            <data id="1435">
                                 <structure name="numberFormat">
                                     <property name="category">Percent</property>
-                                    <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                                    <property name="pattern">###0.00%{RoundingMode=UNNECESSARY}</property>
+                                    <property name="locale">it</property>
                                 </structure>
                                 <property name="textAlign">center</property>
-                                <property name="resultSetColumn">Column Binding</property>
+                                <property name="resultSetColumn">Column Binding_2</property>
                             </data>
                         </cell>
                     </row>
@@ -1949,6 +2251,22 @@ ORDER BY
             <detail>
                 <row id="849">
                     <property name="height">0.26in</property>
+                    <cell id="1429">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <property name="verticalAlign">middle</property>
+                        <data id="857">
+                            <property name="textAlign">center</property>
+                            <property name="resultSetColumn">NumeroDoc</property>
+                        </data>
+                    </cell>
                     <cell id="852">
                         <property name="fontFamily">"Calibri"</property>
                         <property name="borderBottomStyle">solid</property>
@@ -1990,14 +2308,9 @@ ORDER BY
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <property name="verticalAlign">middle</property>
-                        <data id="863">
-                            <structure name="numberFormat">
-                                <property name="category">Currency</property>
-                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
-                                <property name="locale">it</property>
-                            </structure>
-                            <property name="textAlign">right</property>
-                            <property name="resultSetColumn">PrezzoUnitarioNetto</property>
+                        <data id="865">
+                            <property name="textAlign">center</property>
+                            <property name="resultSetColumn">Sconto</property>
                         </data>
                     </cell>
                     <cell id="860">
@@ -2011,28 +2324,17 @@ ORDER BY
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <property name="verticalAlign">middle</property>
-                        <data id="865">
-                            <property name="textAlign">center</property>
-                            <property name="resultSetColumn">Sconto</property>
+                        <data id="863">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
+                            <property name="resultSetColumn">PrezzoUnitarioNetto</property>
                         </data>
                     </cell>
                     <cell id="862">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <property name="verticalAlign">middle</property>
-                        <data id="857">
-                            <property name="textAlign">center</property>
-                            <property name="resultSetColumn">NumeroDoc</property>
-                        </data>
-                    </cell>
-                    <cell id="864">
                         <property name="fontFamily">"Calibri"</property>
                         <property name="borderBottomStyle">solid</property>
                         <property name="borderBottomWidth">thin</property>
@@ -2047,6 +2349,18 @@ ORDER BY
                             <property name="textAlign">center</property>
                             <property name="resultSetColumn">Qta</property>
                         </data>
+                    </cell>
+                    <cell id="864">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <property name="verticalAlign">middle</property>
                     </cell>
                     <cell id="866">
                         <property name="fontFamily">"Calibri"</property>
@@ -2103,8 +2417,9 @@ ORDER BY
                         <property name="verticalAlign">middle</property>
                         <data id="873">
                             <structure name="numberFormat">
-                                <property name="category">Custom</property>
-                                <property name="pattern">0.00 '%'</property>
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
                             </structure>
                             <property name="textAlign">center</property>
                             <property name="resultSetColumn">MargineTotaleRigaPercentuale</property>
@@ -2115,6 +2430,7 @@ ORDER BY
             <footer>
                 <row id="1368">
                     <property name="height">0.09375in</property>
+                    <cell id="1432"/>
                     <cell id="1370"/>
                     <cell id="1371"/>
                     <cell id="1372"/>

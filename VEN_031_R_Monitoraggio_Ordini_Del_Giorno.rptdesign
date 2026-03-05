@@ -1688,6 +1688,7 @@ LEFT JOIN SpeseTrasporto AS ST
             <column id="1615"/>
             <header>
                 <row id="1553">
+                    <property name="backgroundColor">#C9C9C9</property>
                     <property name="height">0.3333333333333333in</property>
                     <cell id="1554">
                         <property name="fontFamily">"Calibri"</property>
@@ -1700,7 +1701,7 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <label id="1555">
-                            <text-property name="text">RicavoTotale</text-property>
+                            <text-property name="text">Ordini Totale</text-property>
                         </label>
                     </cell>
                     <cell id="1556">
@@ -1728,7 +1729,7 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <label id="1559">
-                            <text-property name="text">%Marg Lordo</text-property>
+                            <text-property name="text">% Marg Lordo</text-property>
                         </label>
                     </cell>
                     <cell id="1560">
@@ -1756,7 +1757,7 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <label id="1573">
-                            <text-property name="text">PercMargineNettoReale</text-property>
+                            <text-property name="text">% Margine Netto di sconti</text-property>
                         </label>
                     </cell>
                     <cell id="1564">
@@ -1844,6 +1845,12 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1576">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">RicavoTotale</property>
                         </data>
                     </cell>
@@ -1858,6 +1865,12 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1578">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">MargineLordoTotale</property>
                         </data>
                     </cell>
@@ -1872,6 +1885,11 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1580">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="textAlign">center</property>
                             <property name="resultSetColumn">PercMargineLordo</property>
                         </data>
                     </cell>
@@ -1886,6 +1904,12 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1592">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">MargineNettoTotale</property>
                         </data>
                     </cell>
@@ -1900,6 +1924,11 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1594">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="textAlign">center</property>
                             <property name="resultSetColumn">PercMargineNettoReale</property>
                         </data>
                     </cell>
@@ -1914,6 +1943,12 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1582">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">SpesaTrasportoTotale</property>
                         </data>
                     </cell>
@@ -1928,6 +1963,11 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1584">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="textAlign">center</property>
                             <property name="resultSetColumn">PercIncidenzaTrasportoSuRicavo</property>
                         </data>
                     </cell>
@@ -1942,6 +1982,12 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1586">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">ScontoTrasportoTotale</property>
                         </data>
                     </cell>
@@ -1956,6 +2002,11 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1588">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="textAlign">center</property>
                             <property name="resultSetColumn">PercScontoTrasportoRegalato</property>
                         </data>
                     </cell>
@@ -1970,6 +2021,11 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <data id="1590">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                            </structure>
+                            <property name="textAlign">center</property>
                             <property name="resultSetColumn">PercScontoSuSpesaTrasporto</property>
                         </data>
                     </cell>

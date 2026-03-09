@@ -898,60 +898,70 @@ ORDER BY
                     <property name="name">RicavoTotale</property>
                     <property name="nativeName">RicavoTotale</property>
                     <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">MargineLordoTotale</property>
                     <property name="nativeName">MargineLordoTotale</property>
                     <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">PercMargineLordo</property>
                     <property name="nativeName">PercMargineLordo</property>
                     <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">SpesaTrasportoTotale</property>
                     <property name="nativeName">SpesaTrasportoTotale</property>
                     <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">PercIncidenzaTrasportoSuRicavo</property>
                     <property name="nativeName">PercIncidenzaTrasportoSuRicavo</property>
                     <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">ScontoTrasportoTotale</property>
                     <property name="nativeName">ScontoTrasportoTotale</property>
                     <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
                 </structure>
                 <structure>
                     <property name="position">7</property>
                     <property name="name">PercScontoTrasportoRegalato</property>
                     <property name="nativeName">PercScontoTrasportoRegalato</property>
                     <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">8</property>
                     <property name="name">PercScontoSuSpesaTrasporto</property>
                     <property name="nativeName">PercScontoSuSpesaTrasporto</property>
                     <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
                 <structure>
                     <property name="position">9</property>
                     <property name="name">MargineNettoTotale</property>
                     <property name="nativeName">MargineNettoTotale</property>
                     <property name="dataType">decimal</property>
+                    <property name="nativeDataType">2</property>
                 </structure>
                 <structure>
                     <property name="position">10</property>
                     <property name="name">PercMargineNettoReale</property>
                     <property name="nativeName">PercMargineNettoReale</property>
                     <property name="dataType">float</property>
+                    <property name="nativeDataType">8</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[USE DATA_FACTORY;
@@ -1000,7 +1010,7 @@ SELECT
 
     -- Sconto trasporto regalato totale
     SUM(S.ScontoTrasporto)                                          AS ScontoTrasportoTotale,
-    CAST(-SUM(S.ScontoTrasporto) / NULLIF(SUM(S.RicavoMerce), 0)
+    CAST(SUM(S.ScontoTrasporto) / NULLIF(SUM(S.RicavoMerce), 0)
         AS DECIMAL(10,4))                                           AS PercScontoTrasportoRegalato,
     CAST(SUM(S.ScontoTrasporto) / NULLIF(SUM(ISNULL(ST.SpesaTrasportoReale, 0)), 0)
         AS DECIMAL(10,4))                                           AS PercScontoSuSpesaTrasporto,
@@ -1612,7 +1622,9 @@ LEFT JOIN SpeseTrasporto AS ST
                 </row>
             </header>
         </table>
-        <table id="1552">
+        <table id="1617">
+            <property name="marginTop">40pt</property>
+            <property name="width">6.65625in</property>
             <property name="dataSet">Sintesi</property>
             <list-property name="boundDataColumns">
                 <structure>
@@ -1633,6 +1645,133 @@ LEFT JOIN SpeseTrasporto AS ST
                     <expression name="expression" type="javascript">dataSetRow["PercMargineLordo"]</expression>
                     <property name="dataType">float</property>
                 </structure>
+            </list-property>
+            <column id="1636">
+                <property name="width">2.21875in</property>
+            </column>
+            <column id="1637">
+                <property name="width">2.4270833333333335in</property>
+            </column>
+            <column id="1638">
+                <property name="width">2.0104166666666665in</property>
+            </column>
+            <header>
+                <row id="1618">
+                    <property name="backgroundColor">#C9C9C9</property>
+                    <cell id="1619">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="1620">
+                            <text-property name="text">Totale Ordini</text-property>
+                        </label>
+                    </cell>
+                    <cell id="1621">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="1622">
+                            <text-property name="text">Margine €</text-property>
+                        </label>
+                    </cell>
+                    <cell id="1623">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="1624">
+                            <text-property name="text">Margine %</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="1625">
+                    <cell id="1626">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="1627">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
+                            <property name="resultSetColumn">RicavoTotale</property>
+                        </data>
+                    </cell>
+                    <cell id="1628">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="1629">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
+                            <property name="resultSetColumn">MargineLordoTotale</property>
+                        </data>
+                    </cell>
+                    <cell id="1630">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="1631">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0%{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">center</property>
+                            <property name="resultSetColumn">PercMargineLordo</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <table id="1639">
+            <property name="marginTop">30pt</property>
+            <property name="width">4.666666666666667in</property>
+            <property name="dataSet">Sintesi</property>
+            <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">SpesaTrasportoTotale</property>
                     <text-property name="displayName">SpesaTrasportoTotale</text-property>
@@ -1645,6 +1784,96 @@ LEFT JOIN SpeseTrasporto AS ST
                     <expression name="expression" type="javascript">dataSetRow["PercIncidenzaTrasportoSuRicavo"]</expression>
                     <property name="dataType">float</property>
                 </structure>
+            </list-property>
+            <column id="1653">
+                <property name="width">2.21875in</property>
+            </column>
+            <column id="1654">
+                <property name="width">2.4479166666666665in</property>
+            </column>
+            <header>
+                <row id="1640">
+                    <property name="backgroundColor">#C9C9C9</property>
+                    <cell id="1641">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="1642">
+                            <text-property name="text">Totale Spesa Trasporto</text-property>
+                        </label>
+                    </cell>
+                    <cell id="1643">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="1644">
+                            <text-property name="text">Incidenza % Trasporto su Totale Ordini</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="1645">
+                    <cell id="1646">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="1647">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
+                            <property name="resultSetColumn">SpesaTrasportoTotale</property>
+                        </data>
+                    </cell>
+                    <cell id="1648">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="1649">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0%{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">center</property>
+                            <property name="resultSetColumn">PercIncidenzaTrasportoSuRicavo</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <table id="1655">
+            <property name="marginTop">30pt</property>
+            <property name="width">7.125in</property>
+            <property name="dataSet">Sintesi</property>
+            <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">ScontoTrasportoTotale</property>
                     <text-property name="displayName">ScontoTrasportoTotale</text-property>
@@ -1663,6 +1892,134 @@ LEFT JOIN SpeseTrasporto AS ST
                     <expression name="expression" type="javascript">dataSetRow["PercScontoSuSpesaTrasporto"]</expression>
                     <property name="dataType">float</property>
                 </structure>
+            </list-property>
+            <column id="1674">
+                <property name="width">2.21875in</property>
+            </column>
+            <column id="1675">
+                <property name="width">2.4479166666666665in</property>
+            </column>
+            <column id="1676">
+                <property name="width">2.4583333333333335in</property>
+            </column>
+            <header>
+                <row id="1656">
+                    <property name="backgroundColor">#C9C9C9</property>
+                    <cell id="1657">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="1658">
+                            <text-property name="text">Totale Sconti Trasporto</text-property>
+                        </label>
+                    </cell>
+                    <cell id="1659">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="1660">
+                            <text-property name="text">Incidenza % Sconti su spesa Trasporto </text-property>
+                        </label>
+                    </cell>
+                    <cell id="1661">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <label id="1662">
+                            <text-property name="text">Incidenza % Sconti su Totale Ordini</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="1663">
+                    <cell id="1664">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="1665">
+                            <structure name="numberFormat">
+                                <property name="category">Currency</property>
+                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">right</property>
+                            <property name="resultSetColumn">ScontoTrasportoTotale</property>
+                        </data>
+                    </cell>
+                    <cell id="1666">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="1669">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0%{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">center</property>
+                            <property name="resultSetColumn">PercScontoSuSpesaTrasporto</property>
+                        </data>
+                    </cell>
+                    <cell id="1668">
+                        <property name="fontFamily">"Calibri"</property>
+                        <property name="borderBottomStyle">solid</property>
+                        <property name="borderBottomWidth">thin</property>
+                        <property name="borderLeftStyle">solid</property>
+                        <property name="borderLeftWidth">thin</property>
+                        <property name="borderRightStyle">solid</property>
+                        <property name="borderRightWidth">thin</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">thin</property>
+                        <data id="1667">
+                            <structure name="numberFormat">
+                                <property name="category">Percent</property>
+                                <property name="pattern">###0%{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
+                            </structure>
+                            <property name="textAlign">center</property>
+                            <property name="resultSetColumn">PercScontoTrasportoRegalato</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <table id="1677">
+            <property name="marginTop">30pt</property>
+            <property name="pageBreakAfter">always</property>
+            <property name="width">4.677083333333333in</property>
+            <property name="dataSet">Sintesi</property>
+            <list-property name="boundDataColumns">
                 <structure>
                     <property name="name">MargineNettoTotale</property>
                     <text-property name="displayName">MargineNettoTotale</text-property>
@@ -1676,21 +2033,16 @@ LEFT JOIN SpeseTrasporto AS ST
                     <property name="dataType">float</property>
                 </structure>
             </list-property>
-            <column id="1606"/>
-            <column id="1607"/>
-            <column id="1608"/>
-            <column id="1609"/>
-            <column id="1610"/>
-            <column id="1611"/>
-            <column id="1612"/>
-            <column id="1613"/>
-            <column id="1614"/>
-            <column id="1615"/>
+            <column id="1691">
+                <property name="width">2.21875in</property>
+            </column>
+            <column id="1692">
+                <property name="width">2.4583333333333335in</property>
+            </column>
             <header>
-                <row id="1553">
+                <row id="1678">
                     <property name="backgroundColor">#C9C9C9</property>
-                    <property name="height">0.3333333333333333in</property>
-                    <cell id="1554">
+                    <cell id="1679">
                         <property name="fontFamily">"Calibri"</property>
                         <property name="borderBottomStyle">solid</property>
                         <property name="borderBottomWidth">thin</property>
@@ -1700,11 +2052,12 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderRightWidth">thin</property>
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
-                        <label id="1555">
-                            <text-property name="text">Ordini Totale</text-property>
+                        <label id="1680">
+                            <property name="textAlign">center</property>
+                            <text-property name="text">Totale margine al netto degli sconti </text-property>
                         </label>
                     </cell>
-                    <cell id="1556">
+                    <cell id="1681">
                         <property name="fontFamily">"Calibri"</property>
                         <property name="borderBottomStyle">solid</property>
                         <property name="borderBottomWidth">thin</property>
@@ -1714,127 +2067,16 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderRightWidth">thin</property>
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
-                        <label id="1557">
-                            <text-property name="text">Marg. Lordo</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1558">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <label id="1559">
-                            <text-property name="text">% Marg Lordo</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1560">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <label id="1571">
-                            <text-property name="text">Marg. al netto di sconti</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1562">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <label id="1573">
-                            <text-property name="text">% Margine Netto di sconti</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1564">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <label id="1561">
-                            <text-property name="text">Spesa trasp. tot.</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1566">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <label id="1616">
-                            <text-property name="text">% Incidenza spese traspo. su tot.</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1568">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <label id="1569">
-                            <text-property name="text">Sconto trasp. tot.</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1570">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <label id="1563">
-                            <text-property name="text">%Incidenza sconti  su tot.</text-property>
-                        </label>
-                    </cell>
-                    <cell id="1572">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <label id="1567">
-                            <text-property name="text">% incidenza sconto trasp. su spese trasp.</text-property>
+                        <label id="1682">
+                            <property name="textAlign">center</property>
+                            <text-property name="text">% margine al netto degli sconti</text-property>
                         </label>
                     </cell>
                 </row>
             </header>
             <detail>
-                <row id="1574">
-                    <cell id="1575">
+                <row id="1683">
+                    <cell id="1684">
                         <property name="fontFamily">"Calibri"</property>
                         <property name="borderBottomStyle">solid</property>
                         <property name="borderBottomWidth">thin</property>
@@ -1844,66 +2086,7 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderRightWidth">thin</property>
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
-                        <data id="1576">
-                            <structure name="numberFormat">
-                                <property name="category">Currency</property>
-                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
-                                <property name="locale">it</property>
-                            </structure>
-                            <property name="textAlign">right</property>
-                            <property name="resultSetColumn">RicavoTotale</property>
-                        </data>
-                    </cell>
-                    <cell id="1577">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <data id="1578">
-                            <structure name="numberFormat">
-                                <property name="category">Currency</property>
-                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
-                                <property name="locale">it</property>
-                            </structure>
-                            <property name="textAlign">right</property>
-                            <property name="resultSetColumn">MargineLordoTotale</property>
-                        </data>
-                    </cell>
-                    <cell id="1579">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <data id="1580">
-                            <structure name="numberFormat">
-                                <property name="category">Percent</property>
-                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
-                            </structure>
-                            <property name="textAlign">center</property>
-                            <property name="resultSetColumn">PercMargineLordo</property>
-                        </data>
-                    </cell>
-                    <cell id="1581">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <data id="1592">
+                        <data id="1685">
                             <structure name="numberFormat">
                                 <property name="category">Currency</property>
                                 <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
@@ -1913,7 +2096,7 @@ LEFT JOIN SpeseTrasporto AS ST
                             <property name="resultSetColumn">MargineNettoTotale</property>
                         </data>
                     </cell>
-                    <cell id="1583">
+                    <cell id="1686">
                         <property name="fontFamily">"Calibri"</property>
                         <property name="borderBottomStyle">solid</property>
                         <property name="borderBottomWidth">thin</property>
@@ -1923,110 +2106,14 @@ LEFT JOIN SpeseTrasporto AS ST
                         <property name="borderRightWidth">thin</property>
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
-                        <data id="1594">
+                        <data id="1687">
                             <structure name="numberFormat">
                                 <property name="category">Percent</property>
-                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
+                                <property name="pattern">###0%{RoundingMode=UNNECESSARY}</property>
+                                <property name="locale">it</property>
                             </structure>
                             <property name="textAlign">center</property>
                             <property name="resultSetColumn">PercMargineNettoReale</property>
-                        </data>
-                    </cell>
-                    <cell id="1585">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <data id="1582">
-                            <structure name="numberFormat">
-                                <property name="category">Currency</property>
-                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
-                                <property name="locale">it</property>
-                            </structure>
-                            <property name="textAlign">right</property>
-                            <property name="resultSetColumn">SpesaTrasportoTotale</property>
-                        </data>
-                    </cell>
-                    <cell id="1587">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <data id="1584">
-                            <structure name="numberFormat">
-                                <property name="category">Percent</property>
-                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
-                            </structure>
-                            <property name="textAlign">center</property>
-                            <property name="resultSetColumn">PercIncidenzaTrasportoSuRicavo</property>
-                        </data>
-                    </cell>
-                    <cell id="1589">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <data id="1586">
-                            <structure name="numberFormat">
-                                <property name="category">Currency</property>
-                                <property name="pattern">€#,##0{RoundingMode=UNNECESSARY}</property>
-                                <property name="locale">it</property>
-                            </structure>
-                            <property name="textAlign">right</property>
-                            <property name="resultSetColumn">ScontoTrasportoTotale</property>
-                        </data>
-                    </cell>
-                    <cell id="1591">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <data id="1588">
-                            <structure name="numberFormat">
-                                <property name="category">Percent</property>
-                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
-                            </structure>
-                            <property name="textAlign">center</property>
-                            <property name="resultSetColumn">PercScontoTrasportoRegalato</property>
-                        </data>
-                    </cell>
-                    <cell id="1593">
-                        <property name="fontFamily">"Calibri"</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
-                        <data id="1590">
-                            <structure name="numberFormat">
-                                <property name="category">Percent</property>
-                                <property name="pattern">###0.00%{RoundingMode=HALF_UP}</property>
-                            </structure>
-                            <property name="textAlign">center</property>
-                            <property name="resultSetColumn">PercScontoSuSpesaTrasporto</property>
                         </data>
                     </cell>
                 </row>
